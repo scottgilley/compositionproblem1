@@ -1,0 +1,54 @@
+import numpy as np
+
+epsilon_0 = 8.854187 * 10**-12
+k = 1 / (4 * np.pi *epsilon_0)
+
+class point_charge:
+    def __init__(self, coordinates, charge):
+        self.coords = coordinates
+        self.charge_val = charge
+
+def get_r_vec(charge, point):
+    squiggle = [0, 0]
+    for i in range(2):
+        squiggle[i] = point[i] - charge.coords[i]
+    return squiggle
+def get_r_dist(vector):
+    magnitude = 0
+    for var in vector:
+        magnitude += var**2
+    return np.sqrt(magnitude)
+def get_r_hat(vector, magnitude):
+    return vector / magnitude
+def get_e_field(point, charges):
+    field_at_point = [0, 0]
+    for charge in charges:
+        squiggle = get_r_vec(charge, point)
+        dist = get_r_dist(squiggle)
+        unit_vec = get_r_hat(squiggle, dist)
+        print(unit_vec)
+        contribution = (charge.charge_val / dist**2) * unit_vec
+        field_at_point += contribution
+    ##field_at_point = field_at_point * k
+    return field_at_point
+charges = []
+for i in range(6):
+    angle = np.random.randint(0, 359)
+    y = np.sin(angle)
+    x = np.cos(angle)
+    if(i == 0):
+        charge1 = point_charge((x, y), 1)
+        charges.append(charge1)
+    if(i == 1):
+        charge2 = point_charge((x, y), 1)
+        charges.append(charge2)
+    if(i == 2):
+        charge3 = point_charge((x, y), 1)
+        charges.append(charge3)
+    if(i == 3):
+        charge4 = point_charge((x, y), 1)
+        charges.append(charge4)
+    if(i == 4):
+        charge5 = point_charge((x, y), 1)
+        charges.append(charge5)
+print(get_e_field((2,2), charges))
